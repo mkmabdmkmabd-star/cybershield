@@ -1,3 +1,6 @@
+
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +55,7 @@
     display:flex; align-items:center; justify-content:space-between;
     padding:0 3rem;
     height:60px;
-    background: rgba(2,10,15,0.9);
+    background: rgba(2,10,15,0.95);
     border-bottom:1px solid var(--border);
     backdrop-filter: blur(20px);
   }
@@ -350,7 +353,7 @@
     position:relative;
   }
   .arch-block:not(:last-child)::after {
-    content:'▶';
+    content:'▶️';
     position:absolute; right:-14px; top:50%;
     transform:translateY(-50%);
     color:var(--cyan);
@@ -404,6 +407,43 @@
   /* ─── DASHBOARD ─── */
   #dashboard { background:var(--bg3); }
   .dash-container { max-width:1200px; width:100%; }
+  
+  /* NEW: System Notes Style */
+  .system-notes {
+    background: rgba(255, 183, 0, 0.08);
+    border: 1px solid var(--amber);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 4px;
+  }
+  .system-notes h4 {
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .system-notes ul {
+    list-style: none;
+  }
+  .system-notes li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text);
+    padding-left: 1rem;
+    position: relative;
+  }
+  .system-notes li::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: var(--amber);
+    font-family: 'Share Tech Mono', monospace;
+  }
+
   .dash-preview {
     background:#000;
     border:1px solid var(--border);
@@ -745,7 +785,7 @@
     <div class="overview-visual">
       <div class="esp-diagram">
         <div class="pin-row">
-          <span class="pin">3.3V ⚡</span>
+          <span class="pin">3.3V ⚡️</span>
           <span class="pin amber">GPIO25 🔊</span>
           <span class="pin green">GND</span>
         </div>
@@ -778,7 +818,7 @@ startAsyncScan();
     </div>
     <div class="threats-grid">
       <div class="threat-card deauth fade-up">
-        <div class="threat-icon">⚡</div>
+        <div class="threat-icon">⚡️</div>
         <div class="threat-name">Deauth Attack</div>
         <div class="threat-desc">
           Detects IEEE 802.11 deauthentication frame floods — a classic disconnect-injection attack that forces clients off legitimate access points.
@@ -933,6 +973,16 @@ tone(BUZZER_PIN, <span class="num">1000</span>, <span class="num">200</span>); <
       <h2 class="sec-title">Live <span>Interface</span></h2>
     </div>
 
+    <!-- NEW: System Notes Section -->
+    <div class="system-notes">
+      <h4>⚠️ System Notes & Alerts</h4>
+      <ul>
+        <li>Default AP password is currently set to <strong>password</strong>. Please change it in firmware for production use.</li>
+        <li>Channel scanning is set to auto-hop. If interference is high, fix the channel in settings.</li>
+        <li>Monitor GPIO 25 for audio feedback. If buzzer fails, check connection to 3.3V rail.</li>
+      </ul>
+    </div>
+
     <div class="dash-preview">
       <div class="dash-toolbar">
         <div class="dot-btn"></div>
@@ -981,7 +1031,7 @@ tone(BUZZER_PIN, <span class="num">1000</span>, <span class="num">200</span>); <
           <span class="sig-bar"><span style="font-size:.6rem">-62dBm</span><div class="sig-fill" style="width:35px"></div></span>
         </div>
         <div class="mock-tr">
-          <span class="tr-sus">⚠ [HIDDEN]</span>
+          <span class="tr-sus">⚠️ [HIDDEN]</span>
           <span class="tr-ip">192.168.1.254</span>
           <span class="tr-mac">00:11:22:33:44:55</span>
           <span style="color:var(--amber)">WPA</span>
@@ -1068,7 +1118,7 @@ tone(BUZZER_PIN, <span class="num">1000</span>, <span class="num">200</span>); <
       </div>
 
       <div style="margin-top:1.5rem;background:var(--panel);border:1px solid rgba(255,183,0,0.2);padding:1.2rem;">
-        <div style="font-size:.65rem;letter-spacing:3px;color:var(--amber);margin-bottom:.8rem;">⚠ ARDUINO IDE NOTE</div>
+        <div style="font-size:.65rem;letter-spacing:3px;color:var(--amber);margin-bottom:.8rem;">⚠️ ARDUINO IDE NOTE</div>
         <div style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--text-dim);line-height:1.9;">
           Partition: <span style="color:var(--amber)">Huge APP (3MB No OTA)</span><br>
           Board: <span style="color:var(--cyan)">ESP32 Dev Module</span><br>
@@ -1201,6 +1251,57 @@ window.addEventListener('scroll',()=>{
     }
   });
 });
+
+/* ═════════════════════════════════════════
+   SECURITY PROTECTION SCRIPT
+   ═════════════════════════════════════════ */
+  
+  // 1. Disable Right Click
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
+
+  // 2. Disable Keyboard Shortcuts (F12, Ctrl+Shift+I, Ctrl+U, etc.)
+  document.onkeydown = function(e) {
+    if (event.keyCode == 123) { // F12
+      return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+      return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+      return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { // Ctrl+Shift+C
+      return false;
+    }
+    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+      return false;
+    }
+    if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { // Ctrl+S
+      return false;
+    }
+  };
+
+  // 3. Console Warning Message
+  (function() {
+    const styles = [
+      'color: #ff2d55',
+      'font-size: 40px',
+      'font-weight: bold',
+      'text-shadow: 2px 2px black'
+    ].join(';');
+    
+    const styles2 = [
+      'color: #00f5ff',
+      'font-size: 16px',
+    ].join(';');
+
+    console.log('%c⚠️ SECURITY ALERT!', styles);
+    console.log('%cThis is a protected area. Do not attempt to inspect or modify the code.', styles2);
+    console.log('%cCyberShield Defense System Active.', 'color: #ffb700; font-size: 12px;');
+  })();
 </script>
 </body>
 </html>
+```
